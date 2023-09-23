@@ -48,7 +48,7 @@ public class LivingEntity : MonoBehaviour, IDamageable {
         {
             onDeath();
         }
-
+        Debug.Log("Living Die");
         // 사망 상태를 참으로 변경
         dead = true;
     }

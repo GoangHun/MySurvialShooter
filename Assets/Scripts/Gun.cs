@@ -19,7 +19,6 @@ public class Gun : MonoBehaviour {
     public float timeBetFire = 0.12f; // 총알 발사 간격
     private float lastFireTime; // 총을 마지막으로 발사한 시점
 
-    public event System.Action onCompleteReload;
     private void Awake() {
         // 사용할 컴포넌트들의 참조를 가져오기
         gunAudioPlayer = GetComponent<AudioSource>();
@@ -49,10 +48,10 @@ public class Gun : MonoBehaviour {
     private void Shot() {
         var hitPosition = fireTransform.position + fireTransform.forward * fireDistance;
 		var ray = new Ray(fireTransform.position, fireTransform.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, fireDistance))
-        {
+        if (Physics.Raycast(ray, out RaycastHit hit, fireDistance)) //(디테일)좀비의 박스 콜라이더에 맞지 않게 할 필요가 있음
+		{
             var target = hit.collider.GetComponent<IDamageable>();   //IDamageable을 상속 받은 클래스를 반환함
-            if (target != null)
+            if (target != null) 
             {
                 target.OnDamage(damage, hit.point, hit.normal);
             }

@@ -8,22 +8,21 @@ public class PlayerHealth : LivingEntity {
 
     public AudioClip deathClip; // 사망 소리
     public AudioClip hitClip; // 피격 소리
-    public AudioClip itemPickupClip; // 아이템 습득 소리
 
     private AudioSource playerAudioPlayer; // 플레이어 소리 재생기
     private Animator playerAnimator; // 플레이어의 애니메이터
 
     private PlayerMovement playerMovement; // 플레이어 움직임 컴포넌트
-    //private PlayerShooter playerShooter; // 플레이어 슈터 컴포넌트
+    private PlayerShooter playerShooter; // 플레이어 슈터 컴포넌트
 
     private void Awake() {
-		healthSliderRot = healthSlider.transform.rotation;
+		//healthSliderRot = healthSlider.transform.rotation;
 
 		// 사용할 컴포넌트를 가져오기
 		playerAudioPlayer = GetComponent<AudioSource>();
 		playerAnimator = GetComponent<Animator>();
 		playerMovement = GetComponent<PlayerMovement>();
-		//playerShooter = GetComponent<PlayerShooter>();
+		playerShooter = GetComponent<PlayerShooter>();
 
 	}
 
@@ -31,13 +30,13 @@ public class PlayerHealth : LivingEntity {
         // LivingEntity의 OnEnable() 실행 (상태 초기화)
         base.OnEnable();
 
-        healthSlider.gameObject.SetActive(true);
-		healthSlider.minValue = 0;
-		healthSlider.maxValue = startingHealth; //최대값을 기본값으로 변경.
-        healthSlider.value = health;
+        //healthSlider.gameObject.SetActive(true);
+		//healthSlider.minValue = 0;
+		//healthSlider.maxValue = startingHealth; //최대값을 기본값으로 변경.
+        //healthSlider.value = health;
 
         playerMovement.enabled = true;
-        //playerShooter.enabled = true;
+        playerShooter.enabled = true;
     }
 
 	private void Update()
@@ -46,14 +45,14 @@ public class PlayerHealth : LivingEntity {
         {
             OnDamage(20, Vector3.zero, Vector3.zero);
         }
-        healthSlider.transform.rotation = healthSliderRot;
+        //healthSlider.transform.rotation = healthSliderRot;
 	}
 
 	// 체력 회복
 	public override void RestoreHealth(float newHealth) { 
         // LivingEntity의 RestoreHealth() 실행 (체력 증가)
         base.RestoreHealth(newHealth);
-        healthSlider.value = health;
+        //healthSlider.value = health;
     }
 
     // 데미지 처리
@@ -61,12 +60,12 @@ public class PlayerHealth : LivingEntity {
         
         if (!dead)
         {
-			playerAudioPlayer.PlayOneShot(hitClip);
+			//playerAudioPlayer.PlayOneShot(hitClip);
 		}
         
         // LivingEntity의 OnDamage() 실행(데미지 적용)
         base.OnDamage(damage, hitPoint, hitDirection);
-		healthSlider.value = health;
+		//healthSlider.value = health;
         
 	}
 
@@ -75,12 +74,11 @@ public class PlayerHealth : LivingEntity {
         // LivingEntity의 Die() 실행(사망 적용)
         base.Die();
 
-        healthSlider.gameObject.SetActive(false);
-        playerAudioPlayer.PlayOneShot(deathClip);
+        //healthSlider.gameObject.SetActive(false);
+        //playerAudioPlayer.PlayOneShot(deathClip);
         playerAnimator.SetTrigger("Die");
-
 		playerMovement.enabled = false;
-        //playerShooter.enabled = false;
+        playerShooter.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other) {

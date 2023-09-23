@@ -21,6 +21,7 @@ public class Enemy : LivingEntity {
     public float damage = 20f; // 공격력
     public float timeBetAttack = 0.5f; // 공격 간격
     private float lastAttackTime; // 마지막 공격 시점
+    public float speed;
 
     // 추적할 대상이 존재하는지 알려주는 프로퍼티
     private bool hasTarget
@@ -40,15 +41,7 @@ public class Enemy : LivingEntity {
         enemyRenderer = GetComponentInChildren<Renderer>();
 		enemyRigidbody = GetComponent<Rigidbody>();
 
-	}
-
-    // 적 AI의 초기 스펙을 결정하는 셋업 메서드
-    public void Setup(float newHealth, float newDamage, float newSpeed, Color skinColor) {
-        startingHealth = newHealth;
-        health = newHealth;
-        damage = newDamage;
-        pathFinder.speed = newSpeed;
-        enemyRenderer.material.color = skinColor;
+        pathFinder.speed = speed;
     }
 
     private void Start() {
@@ -74,11 +67,11 @@ public class Enemy : LivingEntity {
 				pathFinder.SetDestination(targetEntity.transform.position); //목적지의 월드 포지션 셋
             }
             else
-            {
+            { 
                 pathFinder.isStopped = true;
                 //나를 중심으로 20f만큼의 반경 안에 있는 지정 레이어를 반환 (폭발 데미지 등에도 사용할 수 있음)
                 Collider[] collides =
-                    Physics.OverlapSphere(transform.position, 20f, whatIsTarget);
+                    Physics.OverlapSphere(transform.position, 100f, whatIsTarget);
 
                 for (int i = 0; i < collides .Length; i++)
                 {
@@ -90,7 +83,6 @@ public class Enemy : LivingEntity {
 					}
                 }
 			}
-
             // 0.25초 주기로 처리 반복
             yield return new WaitForSeconds(0.25f);
         }
@@ -122,9 +114,10 @@ public class Enemy : LivingEntity {
         pathFinder.enabled = false;
 
         enemyAnimator.SetTrigger("Die");
+        enemyAudioPlayer.PlayOneShot(deathSound);
 
-		//enemyAudioPlayer.PlayOneShot(deathSound);
-	}
+        StartCoroutine(DieAfter());
+    }
 
     private void OnTriggerStay(Collider other) {
 		// 트리거 충돌한 상대방 게임 오브젝트가 추적 대상이라면 공격 실행
@@ -134,4 +127,10 @@ public class Enemy : LivingEntity {
             targetEntity.OnDamage(damage, Vector3.zero, Vector3.zero);
 		}
 	}
+
+    private IEnumerator DieAfter()
+    {
+        yield return new WaitForSeconds(0.7f);
+        enemyRigidbody.isKinematic = false;
+    }
 }

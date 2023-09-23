@@ -65,7 +65,7 @@ public class Gun : MonoBehaviour {
     private IEnumerator ShotEffect(Vector3 hitPosition) {   //코루틴을 사용해서 동작
 
         muzzleFlashEffect.Play();
-        //gunAudioPlayer.PlayOneShot(shotClip);
+        gunAudioPlayer.PlayOneShot(shotClip);
 
 		// 라인 렌더러를 활성화하여 총알 궤적을 그린다
 

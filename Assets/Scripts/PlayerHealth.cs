@@ -60,14 +60,16 @@ public class PlayerHealth : LivingEntity {
         
         if (!dead)
         {
-			//playerAudioPlayer.PlayOneShot(hitClip);
+			playerAudioPlayer.PlayOneShot(hitClip);
 		}
         
         // LivingEntity의 OnDamage() 실행(데미지 적용)
         base.OnDamage(damage, hitPoint, hitDirection);
-		//healthSlider.value = health;
-        
-	}
+        StartCoroutine(UIManager.instance.OnDamageEffect());
+        UIManager.instance.UpdateHpUI(health / startingHealth);
+        //healthSlider.value = health;
+
+    }
 
     // 사망 처리
     public override void Die() {
@@ -75,22 +77,11 @@ public class PlayerHealth : LivingEntity {
         base.Die();
 
         //healthSlider.gameObject.SetActive(false);
-        //playerAudioPlayer.PlayOneShot(deathClip);
+        playerAudioPlayer.PlayOneShot(deathClip);
         playerAnimator.SetTrigger("Die");
 		playerMovement.enabled = false;
         playerShooter.enabled = false;
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (dead)
-            return;
-
-        // 아이템과 충돌한 경우 해당 아이템을 사용하는 처리
-        //var item = other.GetComponent<IItem>();
-        //if (item != null)
-        //{
-        //    item.Use(gameObject);
-        //    playerAudioPlayer.PlayOneShot(itemPickupClip);
-        //}
-    }
+   
 }

@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 
-// 주어진 Gun 오브젝트를 쏘거나 재장전
-// 알맞은 애니메이션을 재생하고 IK를 사용해 캐릭터 양손이 총에 위치하도록 조정
-public class PlayerShooter : MonoBehaviour {
-    public Gun gun; // 사용할 총
 
-    private PlayerInput playerInput; // 플레이어의 입력
+public class PlayerShooter : MonoBehaviour {
+    public Gun gun; 
+
+    private PlayerInput playerInput;
 
     private void Start() {
-        // 사용할 컴포넌트들을 가져오기
         playerInput = GetComponent<PlayerInput>();
     }
 
@@ -23,7 +21,6 @@ public class PlayerShooter : MonoBehaviour {
     }
 
     private void Update() {
-        // 입력을 감지하고 총 발사하거나 재장전
         if (playerInput.fire)
         {
 			gun.Fire();

@@ -25,7 +25,33 @@ public class UIManager : MonoBehaviour {
     public TextMeshProUGUI scoreText; // 점수 표시용 텍스트
     public GameObject gameoverUI; // 게임 오버시 활성화할 UI 
     public GameObject playerOnDamageEffet;
+    public GameObject panelGUI;
     public Image hpFill;
+    public Slider musicSlider;
+    public Slider effectSlider;
+    public Toggle soundOfOff;
+
+    private void Awake()
+    {
+        musicSlider.onValueChanged.AddListener(GameManager.instance.UpdateMusicVolume);
+        effectSlider.onValueChanged.AddListener(GameManager.instance.UpdateEffectVolume);
+        soundOfOff.onValueChanged.AddListener(GameManager.instance.SoundOnOff);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = panelGUI.activeSelf ? 1f : 0f;
+            panelGUI.SetActive(!panelGUI.activeSelf);
+            GameManager.instance.isPause = panelGUI.activeSelf;
+        }
+
+        if (GameManager.instance.isGameover && Input.anyKey)
+        {
+            GameManager.instance.SceneLoad();
+        }
+    }
 
     public IEnumerator OnDamageEffect()
     {
@@ -50,10 +76,5 @@ public class UIManager : MonoBehaviour {
     // 게임 오버 UI 활성화
     public void SetActiveGameoverUI(bool active) {
         gameoverUI.SetActive(active);
-    }
-
-    // 게임 재시작
-    public void GameRestart() {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

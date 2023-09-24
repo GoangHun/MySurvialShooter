@@ -10,6 +10,8 @@ public class EnemySpawner : MonoBehaviour {
 
     private List<Enemy> enemies = new List<Enemy>(); // 생성된 적들을 담는 리스트
 
+    public List<Enemy> Enemies {  get { return enemies; } }
+
     private void Start()
     {
         StartCoroutine(CreateEnemy());
@@ -40,9 +42,15 @@ public class EnemySpawner : MonoBehaviour {
             var enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], point.position, point.rotation);
             enemies.Add(enemy);
 
+            var player = enemy.GetComponent<AudioSource>();
+            player.volume = UIManager.instance.effectSlider.value;
+            player.mute = !UIManager.instance.soundOfOff.isOn;
+            GameManager.instance.effectSources.Add(player);
+
             enemy.onDeath += () =>
             {
                 enemies.Remove(enemy);
+                GameManager.instance.effectSources.Remove(player);
                 Destroy(enemy.gameObject, 3f);
                 GameManager.instance.AddScore(10);
             };

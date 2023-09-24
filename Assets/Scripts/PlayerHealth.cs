@@ -2,9 +2,6 @@
 using UnityEngine.UI; 
 
 public class PlayerHealth : LivingEntity {
-    public Slider healthSlider; 
-    private Quaternion healthSliderRot;
-
     public AudioClip deathClip;
     public AudioClip hitClip; 
 

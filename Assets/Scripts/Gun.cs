@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 // 총을 구현한다
@@ -7,6 +8,8 @@ public class Gun : MonoBehaviour {
     public Transform fireTransform; // 총알이 발사될 위치
 
     public ParticleSystem muzzleFlashEffect; // 총구 화염 효과
+    public ParticleSystem ring;
+    public ParticleSystem spatkles;
 
     private LineRenderer bulletLineRenderer; // 총알 궤적을 그리기 위한 렌더러
 
@@ -45,6 +48,7 @@ public class Gun : MonoBehaviour {
 
     }
 
+
     // 실제 발사 처리
     private void Shot() {
         var hitPosition = fireTransform.position + fireTransform.forward * fireDistance;
@@ -75,4 +79,5 @@ public class Gun : MonoBehaviour {
 
         bulletLineRenderer.enabled = false;
     }
+
 }

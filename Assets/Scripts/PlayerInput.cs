@@ -13,18 +13,22 @@ public class PlayerInput : MonoBehaviour {
     public float rotate { get; private set; } // 감지된 회전 입력값
     public bool fire { get; private set; } // 감지된 발사 입력값
     public bool reload { get; private set; } // 감지된 재장전 입력값
+    public bool fireCharging { get; private set; }
+    
+    private float timer = 0f;
+
 
     // 매프레임 사용자 입력을 감지
     private void Update() {
         // 게임오버 상태에서는 사용자 입력을 감지하지 않는다
-        //if (GameManager.instance != null && GameManager.instance.isGameover)
-        //{
-        //    move = 0;
-        //    rotate = 0;
-        //    fire = false;
-        //    reload = false;
-        //    return;
-        //}
+        if (GameManager.instance != null && GameManager.instance.isGameover)
+        {
+            move = 0;
+            rotate = 0;
+            fire = false;
+            reload = false;
+            return;
+        }
 
         // move에 관한 입력 감지
         move = Input.GetAxis(moveAxisName);
@@ -32,7 +36,17 @@ public class PlayerInput : MonoBehaviour {
         rotate = Input.GetAxis(rotateAxisName);
         // fire에 관한 입력 감지
         fire = Input.GetButton(fireButtonName);
-        // reload에 관한 입력 감지
-        //reload = Input.GetButtonDown(reloadButtonName);
+
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            timer = 0f;
+        }
+        if (fire)
+        {
+            timer += Time.deltaTime;
+            fireCharging = timer > 3f;
+        }
+
     }
 }

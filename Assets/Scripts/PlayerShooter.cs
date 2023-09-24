@@ -2,9 +2,12 @@
 
 
 public class PlayerShooter : MonoBehaviour {
-    public Gun gun; 
+    public Gun gun;
+    public ParticleSystem ring;
+    public LayerMask whatIsTarget;
 
     private PlayerInput playerInput;
+
 
     private void Start() {
         playerInput = GetComponent<PlayerInput>();
@@ -24,7 +27,32 @@ public class PlayerShooter : MonoBehaviour {
         if (playerInput.fire)
         {
 			gun.Fire();
-		}  
+		}
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (ring.isPlaying)
+            {
+                ring.Stop();
+            }
+            else
+            {
+                ring.Play();
+            }
+            
+        }
+
+        if (ring.isPlaying)
+        {
+            Collider[] collides =
+                    Physics.OverlapSphere(transform.position, 10f, whatIsTarget);
+
+            for (int i = 0; i < collides.Length; i++)
+            {
+                var enemy = collides[i].GetComponent<Enemy>();
+                enemy.OnDamage(2f, Vector3.zero, Vector3.zero);
+            }
+        }
+
     }
 
   
